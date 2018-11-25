@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "allowJs": false,
+    "alwaysStrict": true,
+    "noImplicitThis": true,
+    "composite": true,
+    "experimentalDecorators": true,
+    "noEmit": true,
+    "noEmitHelpers": true,
+    "noEmitOnError": true,
+    "baseUrl": ".",
+    "lib": ["esnext", "dom"],
+    "module": "umd",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "stripInternal": true,
+    "target": "es2018",
+    "paths": {
+      "@aurelia/kernel": ["./kernel"],
+      "@aurelia/runtime": ["./runtime"],
+      "@aurelia/jit": ["./jit"],
+      "@aurelia/debug": ["./debug"]
+    }
+  },
+  "include": [
+    "./**/*.ts"
+  ]
+}

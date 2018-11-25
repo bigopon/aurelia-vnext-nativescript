@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "noEmitHelpers": true,
+    "noEmitOnError": true,
+    "downlevelIteration": true,
+    "lib": [
+      "es6",
+      "dom",
+      "es2016.array.include"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "~/*": [
+        "app/*"
+      ],
+      "*": [
+        "./node_modules/tns-core-modules/*",
+        "./node_modules/*"
+      ],
+      "@aurelia": [
+        "./app/@aurelia"
+      ]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "platforms"
+  ]
+}
