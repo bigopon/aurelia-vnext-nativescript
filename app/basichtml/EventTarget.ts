@@ -1,9 +1,5 @@
 import { Event } from './Event';
 
-interface EventListener {
-  handleEvent(e: Event): any;
-}
-
 const getHandler = (self: EventTarget, handler: EventListenerOrEventListenerObject) =>
   (handler as EventListenerObject).handleEvent ?
     e => (handler as EventListenerObject).handleEvent(e) :
