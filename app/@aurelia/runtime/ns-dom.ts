@@ -1,15 +1,14 @@
 import { View, ViewBase } from 'tns-core-modules/ui/core/view';
 import { ContentView } from 'tns-core-modules/ui/page/page';
-import { Node, Element, DocumentFragment, Document, HTMLTemplateElement, Text } from '../../basichtml';
+import { Node, Element, DocumentFragment, Document, HTMLElement, HTMLTemplateElement, Text } from '../../basichtml';
 import { PLATFORM, DI, Constructable, Writable, IContainer, IResolver } from '../kernel';
 import { LayoutBase } from 'tns-core-modules/ui/layouts/layout-base';
 import { TextBase } from 'tns-core-modules/ui/text-base/text-base';
 import { Button } from 'tns-core-modules/ui/button/button';
 import { Frame } from 'tns-core-modules/ui/frame/frame';
-import { INode } from './dom';
+import { document, INode } from './dom';
 
 // const { Document, DocumentFragment } = BasicHtml;
-export const document = new Document();
 
 function isRenderLocation(node: INsNode): node is INsRenderLocation {
   return node.constructor === ContentView;
@@ -27,6 +26,10 @@ export function isContentView(view: ViewBase): view is ContentView {
   return view instanceof ContentView;
 }
 
+export function isFrame(view: ViewBase): view is Frame {
+  return view instanceof Frame;
+}
+
 const NsDomMap: Record<string, () => INsNode> = {};
 export const NsDOM = new class {
 
@@ -34,7 +37,7 @@ export const NsDOM = new class {
     container.registerResolver(INsNode, resolver);
     container.registerResolver(Element, resolver);
     container.registerResolver(HTMLElement, resolver);
-    container.registerResolver(SVGElement, resolver);
+    // container.registerResolver(SVGElement, resolver);
   }
 
   createDocumentFragment(markupOrNode?: any): DocumentFragment {
@@ -99,6 +102,10 @@ export const NsDOM = new class {
   createElement(tagName: 'Frame'): Frame;
   createElement(tagName: string): INsNode;
   createElement(tagName: string): INsNode {
+    if (!(tagName in NsDomMap)) {
+      console.log(Object.keys(NsDomMap));
+      throw new Error('There is no element with ' + tagName + ' registered');
+    }
     return NsDomMap[tagName]();
   }
 
@@ -218,8 +225,11 @@ export const NsDOM = new class {
         parentView.content = view;
       }
       return view;
+    } else if (isFrame(parentView)) {
+      parentView._addView(view);
+      return view;
     }
-    throw new Error('Invalid add operation');
+    throw new Error(`Invalid add operation. Cannot add "${view.typeName}" to "${parentView.typeName}"`);
   }
 
   isNodeInstance(node: any): node is INsNode {
@@ -369,7 +379,9 @@ export class NsFragmentNodeSequence implements INsNodeSequence {
   constructor(fragment: DocumentFragment) {
     this.fragment = fragment;
     const targetNodeList: INsNode[] = [];
-    const pixiNodes = this.children = nodesToNsViews(fragment.childNodes, null, targetNodeList);
+    const nsNodes = this.children = nodesToNsViews(fragment.childNodes, null, targetNodeList);
+    console.log('=============================\nNS Node count:', nsNodes.length);
+    console.log(nsNodes[0].typeName);
     // tslint:disable-next-line:no-any
     // const targetNodeList = fragment.querySelectorAll('.au');
     let i = 0;
@@ -399,9 +411,9 @@ export class NsFragmentNodeSequence implements INsNodeSequence {
     //   ++i;
     // }
 
-    const nodeCount = pixiNodes.length;
-    this.firstChild = nodeCount > 0 ? pixiNodes[0] : null;
-    this.lastChild = nodeCount > 0 ? pixiNodes[nodeCount - 1] : null;
+    const nodeCount = nsNodes.length;
+    this.firstChild = nodeCount > 0 ? nsNodes[0] : null;
+    this.lastChild = nodeCount > 0 ? nsNodes[nodeCount - 1] : null;
 
     this.start = this.end = null;
   }
@@ -442,6 +454,9 @@ export class NsFragmentNodeSequence implements INsNodeSequence {
     // tslint:disable-next-line:no-any
     // (<any>parent).appendChild(this.fragment);
     // parent.addChild(...this.children);
+    // if (this.children.length === 1 && this.children[0].typeName === 'Page') {
+      
+    // }
     this.children.forEach(c => NsDOM.appendChild(c, parent));
     // this can never be a RenderLocation, and if for whatever reason we moved
     // from a RenderLocation to a host, make sure "start" and "end" are null
@@ -546,19 +561,23 @@ function nodesToNsViews(nodes: Node | Node[], parent: INsNode = null, targets: I
   for (let i = 0, ii = nodes.length; ii > i; ++i) {
     const node = nodes[i];
     let nsView: INsNode | null = null;
+    console.log(node.nodeType);
+    if (!node.nodeType) {
+      throw new Error('No node type????');
+    }
     switch (node.nodeType) {
       case NodeTypes.ELEMENT:
-        const nodeName = nodes[i].nodeName.toLowerCase();
+        const nodeName = nodes[i].nodeName;
         nsView = NsDOM.createElement(nodeName);
         nsView.nodeName = nodeName;
         if ((node as Element).classList.contains('au')) {
           targets.push(nsView);
         }
         break;
-      case NodeTypes.TEXT:
-        nsView = NsDOM.createTextNode(node.textContent);
-        nsView.nodeName = '#text';
-        break;
+      // case NodeTypes.TEXT:
+      //   nsView = NsDOM.createTextNode(node.textContent);
+      //   nsView.nodeName = '#text';
+      //   break;
     }
     if (nsView === null) {
       continue;

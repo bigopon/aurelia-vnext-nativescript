@@ -3,7 +3,6 @@ import { Event } from './Event';
 import { Node } from './Node';
 // DOMStringMap: require('./src/DOMStringMap'),
 import { Element } from './Element';
-import { DocumentType } from './DocumentType';
 import { Attr } from './Attr';
 import { CSSStyleDeclaration } from './CSSStyleDeclaration';
 import { Comment } from './Comment';
@@ -13,6 +12,20 @@ import { HTMLHtmlElement } from './HTMLHtmlElement';
 import { HTMLTemplateElement } from './HTMLTemplateElement';
 import { Range } from './Range';
 import { Text } from './Text';
+
+// interface DocumentType // https://dom.spec.whatwg.org/#documenttype
+export class DocumentType extends Node {
+  constructor(ownerDocument: Document) {
+    super(ownerDocument);
+    this.nodeType = Node.DOCUMENT_TYPE_NODE;
+    this.name = 'html';
+  }
+
+  toString(): string {
+    return '<!DOCTYPE ' + this.name + '>';
+  }
+}
+
 
 const headTag = (el: Node) => el.nodeName === 'head';
 const bodyTag = (el: Node) => el.nodeName === 'body';

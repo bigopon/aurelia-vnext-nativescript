@@ -36,7 +36,7 @@ export interface INsConfig {
 }
 
 export interface ISinglePageApp {
-  host: Frame;
+  // host: Frame;
   component: unknown;
 }
 
@@ -68,7 +68,7 @@ export class Aurelia {
   }
 
   public app(config: ISinglePageApp): this {
-    const root = this.initNativeScript(config) as Frame & { $au?: Aurelia | null };
+    const root = this.initNativeScript(config) as Page & { $au?: Aurelia | null };
     // const host = config.host as INode & {$au?: Aurelia | null};
     let component: ICustomElement;
     const componentOrType = config.component as ICustomElement | ICustomElementType;
@@ -91,7 +91,17 @@ export class Aurelia {
       component.$bind(LifecycleFlags.fromStartTask | LifecycleFlags.fromBind);
       component.$attach(LifecycleFlags.fromStartTask, root);
 
-      NsApplication.run();
+      NsApplication.run({
+        create: () => {
+          return root;
+          // let firstChild: INsNode;
+          // root.eachChildView((view) => (firstChild = view as INsNode, false));
+          // if (!firstChild) {
+          //   throw new Error('Failed to init application. No page found');
+          // }
+          // return firstChild;
+        }
+      });
     };
 
     this.startTasks.push(startTask);
@@ -130,8 +140,9 @@ export class Aurelia {
   }
 
   private initNativeScript(config: ISinglePageApp) {
-    config.host = config.host || NsDOM.createElement('Frame');
-    return config.host;
+    // config.host = config.host || NsDOM.createElement('Frame');
+    // return config.host;
+    return NsDOM.createElement('Page');
   }
 }
 

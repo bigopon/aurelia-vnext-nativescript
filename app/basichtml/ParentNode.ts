@@ -1,7 +1,5 @@
-import '@webreflection/interface';
-
 import { Node } from './Node';
-import { Element } from './Element';
+// import { Element } from './Element';
 import { querySelectorAll as _querySelectorAll } from './utils';
 
 const childrenType = node => node.nodeType === Node.ELEMENT_NODE;
@@ -12,12 +10,12 @@ function asNode(this: Document, node: any) {
     this.createTextNode(node);
 }
 
-export interface ParentNode extends Node {}
+// export interface ParentNode extends Node {}
 // interface ParentNode @ https://dom.spec.whatwg.org/#parentnode
 export abstract class ParentNode extends Node {
 
-  get children(): Element[] {
-    return this.childNodes.filter(childrenType) as Element[];
+  get children(): any[] {
+    return this.childNodes.filter(childrenType) as any[];
   }
 
   get firstElementChild() {

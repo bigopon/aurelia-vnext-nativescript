@@ -202,8 +202,6 @@ Object.keys(utils.types).forEach(type => {
   Node[type] = (Node.prototype[type] = utils.types[type]);
 });
 
-module.exports = Node;
-
 function removeAttribute(attr) {
   if (attr.name === 'style')
     this.style.cssText = '';

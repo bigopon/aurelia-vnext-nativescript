@@ -116,7 +116,7 @@ export class SemanticModel {
     const node = syntax.node as Element;
     let definition: ITemplateDefinition;
     if (node.nodeType === NodeType.Element) {
-      const resourceKey = (node.getAttribute('as-element') || node.nodeName).toLowerCase();
+      const resourceKey = (node.getAttribute('as-element') || node.nodeName);
       definition = this.getElementDefinition(resourceKey);
     }
 

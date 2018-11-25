@@ -5,6 +5,8 @@ import { notifyAttributeChanged } from './utils';
 import { ParentNode } from './ParentNode';
 import { Node } from './Node';
 import { DOMTokenList } from './DOMTokenList';
+import * as utils from './utils';
+import { CSSStyleDeclaration } from './CSSStyleDeclaration';
 import { Attr } from './Attr';
 
 const { ELEMENT_NODE, ATTRIBUTE_NODE, TEXT_NODE, COMMENT_NODE } = Node;
@@ -264,6 +266,3 @@ export class Element extends ParentNode {
   }
 
 };
-
-
-export default Element;

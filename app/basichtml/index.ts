@@ -1,6 +1,6 @@
 import * as utils from './utils';
 import { CustomElementRegistry } from './CustomElementRegistry';
-import { Document } from './Document';
+import { Document, DocumentType } from './Document';
 import { HTMLElement } from './HTMLElement';
 import { HTMLUnknownElement } from './HTMLUnknownElement';
 
@@ -10,7 +10,6 @@ export { Comment } from './Comment';
 export { CustomEvent } from './CustomEvent';
 export { Document };
 export { DocumentFragment } from './DocumentFragment';
-export { DocumentType } from './DocumentType';
 export { DOMStringMap } from './DOMStringMap';
 export { DOMTokenList } from './DOMTokenList';
 export { Element } from './Element';

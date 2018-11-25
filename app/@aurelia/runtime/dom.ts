@@ -1,6 +1,9 @@
 import { View } from 'tns-core-modules/ui/core/view';
 import { Constructable, DI, IContainer, IResolver, PLATFORM, Reporter, Writable } from '../kernel';
 import { INsNode } from './ns-dom';
+import { Document } from '../../basichtml';
+
+export const document = new Document();
 
 export const ELEMENT_NODE = 1;
 export const ATTRIBUTE_NODE = 2;

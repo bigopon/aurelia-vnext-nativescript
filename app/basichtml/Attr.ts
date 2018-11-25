@@ -1,7 +1,7 @@
-import * as utils from './utils';
 import { Node } from './Node';
 import { Element } from './Element';
 import { CSSStyleDeclaration } from './CSSStyleDeclaration';
+import * as utils from './utils';
 
 // interface Attr // https://dom.spec.whatwg.org/#attr
 export class Attr extends Node {
@@ -56,3 +56,4 @@ export class Attr extends Node {
   }
 
 };
+

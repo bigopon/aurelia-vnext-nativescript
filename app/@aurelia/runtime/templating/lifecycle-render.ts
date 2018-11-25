@@ -347,6 +347,7 @@ export class HostProjector implements IElementProjector {
   }
 
   public project(nodes: INsNodeSequence): void {
+    console.log('============ Projecting to this host ======== ' + this.host.typeName);
     nodes.appendTo(this.host);
     if (!this.isAppHost) {
       this.project = PLATFORM.noop;

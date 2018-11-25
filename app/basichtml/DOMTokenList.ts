@@ -19,7 +19,10 @@ export class DOMTokenList extends Array<string> {
 
   constructor(ownerElement: Element) {
     super();
-    this._ownerElement = ownerElement;
+    const arr: DOMTokenList = [] as any;
+    Object.setPrototypeOf(arr, DOMTokenList.prototype);
+    this._ownerElement = arr._ownerElement = ownerElement;
+    return arr;
   }
 
   item(i: number) {
